@@ -201,6 +201,7 @@ html, body {
     z-index: 1;
     color: white;
     font-weight: 600;
+    text-decoration: none;
 }
 
 .left-btn {
