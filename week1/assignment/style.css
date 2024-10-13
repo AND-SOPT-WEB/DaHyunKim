@@ -116,25 +116,29 @@ html, body {
 }
 
 .infinite-slider-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    overflow: hidden;
+    position: relative;
     width: 100%;
-}
-
-.infinite-banner-title {
-    color: white;
-    font-size: 1.6rem;
-    margin-bottom: 2rem;
-    font-weight: 600;
-    margin-left: 1.5rem;
-}
-
-.infinite-slider {
+    height: 100%;
     display: flex;
-    width: max-content;
-    animation: scroll 20s linear infinite;
+    overflow: hidden;
+}
+
+.infinite-banner-first,
+.infinite-banner-second {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    animation-duration: 15s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+.infinite-banner-first {
+    animation-name: slideFirstBanner;
+}
+
+.infinite-banner-second {
+    animation-name: slideSecondBanner;
 }
 
 .infinite-img {
@@ -146,15 +150,30 @@ html, body {
 }
 
 .infinite-img:hover {
-    transform: scale(1.1); 
+    transform: scale(1.1);
 }
 
-@keyframes scroll {
+@keyframes slideFirstBanner {
     0% {
-      transform: translateX(0);
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(-100%);
+    }
+    50.01% {
+        transform: translateX(100%);
     }
     100% {
-      transform: translateX(-50%);
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideSecondBanner {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-200%);
     }
 }
 
