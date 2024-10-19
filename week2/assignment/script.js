@@ -27,6 +27,19 @@ document.getElementById('search-btn').addEventListener('click', () => {
     renderTable(filteredMembers);
 });
 
+document.getElementById('reset-btn').addEventListener('click', () => {
+    document.querySelectorAll("input").forEach(input => {
+        input.value = "";
+    });
+
+    document.querySelectorAll("select").forEach(select => {
+        select.value = "";
+    });
+
+    // 테이블 다시 렌더링
+    renderTable(members);
+});
+
 function renderTable(members) {
     // tBody 뽑아내기
     const tBody = document.querySelector("tbody");
