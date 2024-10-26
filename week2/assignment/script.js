@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderTable(members);
 });
 
+
 document.getElementById('search-btn').addEventListener('click', () => {
     const nameInput = document.querySelector('input[name="name"]').value;
     const engnameInput = document.querySelector('input[name="engname"]').value.toLowerCase();
@@ -85,5 +86,17 @@ function renderTable(members) {
         // tBody에 tr 추가
         tBody.appendChild(tr);
     });
+
 }
 
+const modal = document.querySelector('.modal');
+const modalOpen = document.querySelector('#add-btn');
+const modalClose = document.querySelector('.close-btn');
+
+modalOpen.addEventListener('click', function() {
+    modal.style.display = 'block';
+});
+
+modalClose.addEventListener('click', function() {
+    modal.style.display = 'none';
+});
