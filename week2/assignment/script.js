@@ -39,7 +39,7 @@ document.querySelector('.modal-add-btn').addEventListener('click', () => {
 
     // 새로운 멤버 객체 생성
     const newMember = {
-        id: members.length + 1, // 배열 길이에 1을 더해서 ID 생성
+        id: members.length + 1, 
         name,
         englishName,
         github,
@@ -115,7 +115,7 @@ document.getElementById('delete-btn').addEventListener('click', () => {
         return !rowCheckbox.checked; // 체크되지 않은 항목만 남기기
     });
 
-    saveMembers(updatedMembers); // 로컬 스토리지에 갱신된 members 저장
+    saveMembers(updatedMembers); 
     renderTable(updatedMembers); // 업데이트된 데이터로 테이블 다시 렌더링
 });
 
@@ -143,10 +143,16 @@ function renderTable(data) {
         checkbox.type = "checkbox";
         checkTd.appendChild(checkbox);
 
+         // GitHub 링크 설정
+         const githubLink = document.createElement("a");
+         githubLink.href = `https://github.com/${member.github}`; 
+         githubLink.target = "_blank"; 
+         githubLink.textContent = member.github; // 링크 텍스트로 아이디 표시
+         githubTd.appendChild(githubLink); // githubTd에 링크 추가
+
         // 각 td에 데이터 추가
         nameTd.textContent = member.name;
         engnameTd.textContent = member.englishName;
-        githubTd.textContent = member.github;
         genderTd.textContent = member.gender === 'male' ? '남자' : '여자';
         roleTd.textContent = member.role;
         week1Td.textContent = member.firstWeekGroup;
