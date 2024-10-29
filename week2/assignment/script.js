@@ -3,7 +3,7 @@ import { members as defaultMembers } from './members.js';
 // 로컬 스토리지에서 데이터를 가져오는 함수
 function loadMembers() {
     const storedMembers = localStorage.getItem('membersData');
-    return storedMembers ? JSON.parse(storedMembers) : defaultMembers;
+    return storedMembers ? JSON.parse(storedMembers) : defaultMembers; // 저장된 데이터가 없으면 기본 members 사용
 }
 
 // 로컬 스토리지에 데이터를 저장하는 함수
@@ -11,11 +11,60 @@ function saveMembers(data) {
     localStorage.setItem('membersData', JSON.stringify(data));
 }
 
-// 페이지가 로드되면 테이블을 초기 렌더링
+// 전역 변수로 members 선언 후 로컬 스토리지에서 데이터 불러오기
+let members = loadMembers();
+
+// 문서 로딩되면 바로 테이블 렌더링 되게
 document.addEventListener('DOMContentLoaded', () => {
     const members = loadMembers(); // 로컬 스토리지에서 데이터 로드
-    renderTable(members); // 로드된 데이터로 테이블 렌더링
+    renderTable(members); 
 });
+
+// 모달 내 기능
+document.querySelector('.modal-add-btn').addEventListener('click', () => {
+    // 모든 입력 필드 값 가져오기
+    const name = document.querySelector('.modal input[name="name"]').value;
+    const englishName = document.querySelector('.modal input[placeholder="영문 이름을 입력하세요"]').value;
+    const github = document.querySelector('.modal input[placeholder="GitHub ID를 입력하세요"]').value;
+    const gender = document.querySelector('.modal select[name="gender"]').value;
+    const role = document.querySelector('.modal select[name="role"]').value;
+    const firstWeekGroup = document.querySelector('.modal input[placeholder="1주차 금잔디조를 입력하세요 (1-9)"]').value;
+    const secondWeekGroup = document.querySelector('.modal input[placeholder="2주차 금잔디조를 입력하세요 (1-9)"]').value;
+
+    // 입력 필드 중 하나라도 비어있으면 alert 표시
+    if (!name || !englishName || !github || !gender || !role || !firstWeekGroup || !secondWeekGroup) {
+        alert("모든 필드를 채워주세요.");
+        return;
+    }
+
+    // 새로운 멤버 객체 생성
+    const newMember = {
+        id: members.length + 1, // 배열 길이에 1을 더해서 ID 생성
+        name,
+        englishName,
+        github,
+        gender,
+        role,
+        firstWeekGroup: parseInt(firstWeekGroup),
+        secondWeekGroup: parseInt(secondWeekGroup)
+    };
+
+    members.push(newMember);
+    saveMembers(members);
+
+    renderTable(members); 
+    closeModal(); 
+});
+
+// 모달 닫기 함수
+function closeModal() {
+    const modal = document.querySelector('.modal');
+    modal.style.display = 'none';
+
+    // 모달 내 입력 필드 초기화
+    document.querySelectorAll('.modal input').forEach(input => input.value = '');
+    document.querySelectorAll('.modal select').forEach(select => select.value = '');
+}
 
 // 검색 기능
 document.getElementById('search-btn').addEventListener('click', () => {
@@ -28,6 +77,7 @@ document.getElementById('search-btn').addEventListener('click', () => {
     const week1Input = document.querySelector('input[name="week1"]').value;
     const week2Input = document.querySelector('input[name="week2"]').value;
 
+    // 필터링 조건에 맞는 멤버 필터링
     const filteredMembers = members.filter(member => 
         member.name.includes(nameInput) && 
         member.englishName.toLowerCase().includes(engnameInput) &&
@@ -38,11 +88,12 @@ document.getElementById('search-btn').addEventListener('click', () => {
         (week2Input === '' || member.secondWeekGroup === parseInt(week2Input))
     );
 
-    renderTable(filteredMembers);
+    renderTable(filteredMembers); // 필터링된 결과로 테이블 다시 렌더링
 });
 
 // 초기화 기능
 document.getElementById('reset-btn').addEventListener('click', () => {
+    // 모든 입력 필드 초기화
     document.querySelectorAll("input").forEach(input => {
         input.value = "";
     });
@@ -51,6 +102,7 @@ document.getElementById('reset-btn').addEventListener('click', () => {
         select.value = "";
     });
 
+    // 테이블 다시 렌더링
     const members = loadMembers(); // 초기화 시 최신 데이터를 다시 로드
     renderTable(members);
 });
@@ -69,12 +121,15 @@ document.getElementById('delete-btn').addEventListener('click', () => {
 
 // 테이블 렌더링 함수
 function renderTable(data) {
+    // tBody 뽑아내기
     const tBody = document.querySelector("tbody");
     tBody.innerHTML = ''; // 테이블 초기화
 
     data.forEach (member => {
+        // 새로운 행 생성
         const tr = document.createElement("tr");
 
+        // 새로운 td 생성
         const checkTd = document.createElement("td");
         const nameTd = document.createElement("td");
         const engnameTd = document.createElement("td");
@@ -88,6 +143,7 @@ function renderTable(data) {
         checkbox.type = "checkbox";
         checkTd.appendChild(checkbox);
 
+        // 각 td에 데이터 추가
         nameTd.textContent = member.name;
         engnameTd.textContent = member.englishName;
         githubTd.textContent = member.github;
@@ -96,6 +152,7 @@ function renderTable(data) {
         week1Td.textContent = member.firstWeekGroup;
         week2Td.textContent = member.secondWeekGroup;
 
+        // tr에 각 td 추가
         tr.appendChild(checkTd);
         tr.appendChild(nameTd);
         tr.appendChild(engnameTd);
@@ -105,9 +162,11 @@ function renderTable(data) {
         tr.appendChild(week1Td);
         tr.appendChild(week2Td);
 
+        // tBody에 tr 추가
         tBody.appendChild(tr);
     });
 
+    // 체크박스 전체 선택 기능
     const allCheckBox = document.querySelector('.all-check');
     const memberCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]');
 
