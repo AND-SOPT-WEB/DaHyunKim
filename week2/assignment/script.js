@@ -204,3 +204,10 @@ modalOpen.addEventListener('click', function() {
 modalClose.addEventListener('click', function() {
     modal.style.display = 'none';
 });
+
+// 백드롭 클릭 시 모달 닫기
+modal.addEventListener('click', (event) => {
+    if (event.target === modal) {
+        closeModal();
+    }
+});
