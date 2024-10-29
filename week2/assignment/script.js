@@ -79,7 +79,7 @@ document.getElementById('search-btn').addEventListener('click', () => {
 
     // 필터링 조건에 맞는 멤버 필터링
     const filteredMembers = members.filter(member => 
-        member.name.includes(nameInput) && 
+        member.name.toLowerCase().includes(nameInput) &&
         member.englishName.toLowerCase().includes(engnameInput) &&
         member.github.toLowerCase().includes(githubInput) &&
         (genderInput === '' || member.gender === genderInput) &&
@@ -172,14 +172,22 @@ function renderTable(data) {
         tBody.appendChild(tr);
     });
 
-    // 체크박스 전체 선택 기능
     const allCheckBox = document.querySelector('.all-check');
     const memberCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]');
 
+    // 전체 선택 체크박스 클릭 시 모든 체크박스 상태 변경
     allCheckBox.addEventListener('change', (event) => {
-        const isChecked = event.target.checked; 
+        const isChecked = event.target.checked;
         memberCheckboxes.forEach(checkbox => {
-            checkbox.checked = isChecked; 
+            checkbox.checked = isChecked;
+        });
+    });
+
+    // 개별 체크박스에 따라 전체 선택 체크박스 상태 변경되게
+    memberCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            const allChecked = Array.from(memberCheckboxes).every(checkbox => checkbox.checked);
+            allCheckBox.checked = allChecked;
         });
     });
 }
