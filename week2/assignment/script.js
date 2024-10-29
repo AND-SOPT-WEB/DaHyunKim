@@ -23,13 +23,13 @@ document.addEventListener('DOMContentLoaded', () => {
 // 모달 내 기능
 document.querySelector('.modal-add-btn').addEventListener('click', () => {
     // 모든 입력 필드 값 가져오기
-    const name = document.querySelector('.modal input[name="name"]').value;
-    const englishName = document.querySelector('.modal input[placeholder="영문 이름을 입력하세요"]').value;
-    const github = document.querySelector('.modal input[placeholder="GitHub ID를 입력하세요"]').value;
-    const gender = document.querySelector('.modal select[name="gender"]').value;
-    const role = document.querySelector('.modal select[name="role"]').value;
-    const firstWeekGroup = document.querySelector('.modal input[placeholder="1주차 금잔디조를 입력하세요 (1-9)"]').value;
-    const secondWeekGroup = document.querySelector('.modal input[placeholder="2주차 금잔디조를 입력하세요 (1-9)"]').value;
+    const name = document.getElementById('modal-name').value;
+    const englishName = document.getElementById('modal-english-name').value;
+    const github = document.getElementById('modal-github').value;
+    const gender = document.getElementById('modal-gender').value;
+    const role = document.getElementById('modal-role').value;
+    const firstWeekGroup = document.getElementById('modal-first-week').value;
+    const secondWeekGroup = document.getElementById('modal-second-week').value;
 
     // 입력 필드 중 하나라도 비어있으면 alert 표시
     if (!name || !englishName || !github || !gender || !role || !firstWeekGroup || !secondWeekGroup) {
