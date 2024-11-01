@@ -3,7 +3,7 @@ import { members as defaultMembers } from './members.js';
 // 로컬 스토리지에서 데이터를 가져오는 함수
 function loadMembers() {
     const storedMembers = localStorage.getItem('membersData');
-    return storedMembers ? JSON.parse(storedMembers) : defaultMembers; // 저장된 데이터가 없으면 기본 members 사용
+    return storedMembers ? JSON.parse(storedMembers) : defaultMembers;
 }
 
 // 로컬 스토리지에 데이터를 저장하는 함수
@@ -11,12 +11,9 @@ function saveMembers(data) {
     localStorage.setItem('membersData', JSON.stringify(data));
 }
 
-// 전역 변수로 members 선언 후 로컬 스토리지에서 데이터 불러오기
-let members = loadMembers();
-
 // 문서 로딩되면 바로 테이블 렌더링 되게
 document.addEventListener('DOMContentLoaded', () => {
-    renderTable(members); 
+    renderTable(loadMembers());
 });
 
 // 모달 내 기능
@@ -34,8 +31,9 @@ document.querySelector('.modal-add-btn').addEventListener('click', () => {
         return;
     }
 
+    const members = loadMembers();
     const newMember = {
-        id: members.length + 1, 
+        id: members.length + 1,
         name,
         englishName,
         github,
@@ -47,8 +45,8 @@ document.querySelector('.modal-add-btn').addEventListener('click', () => {
 
     members.push(newMember);
     saveMembers(members);
-    renderTable(members); 
-    closeModal(); 
+    renderTable(members);
+    closeModal();
 });
 
 // 모달 닫기 함수
@@ -61,7 +59,7 @@ function closeModal() {
 
 // 검색 기능
 document.getElementById('search-btn').addEventListener('click', () => {
-    const nameInput = document.querySelector('input[name="name"]').value;
+    const nameInput = document.querySelector('input[name="name"]').value.toLowerCase();
     const engnameInput = document.querySelector('input[name="engname"]').value.toLowerCase();
     const githubInput = document.querySelector('input[name="github"]').value.toLowerCase();
     const genderInput = document.querySelector('select[name="gender"]').value;
@@ -69,18 +67,17 @@ document.getElementById('search-btn').addEventListener('click', () => {
     const week1Input = document.querySelector('input[name="week1"]').value;
     const week2Input = document.querySelector('input[name="week2"]').value;
 
-    // 검색된 결과를 members에 반영
-    members = loadMembers().filter(member => 
+    const members = loadMembers().filter(member => 
         member.name.toLowerCase().includes(nameInput) &&
         member.englishName.toLowerCase().includes(engnameInput) &&
         member.github.toLowerCase().includes(githubInput) &&
         (genderInput === '' || member.gender === genderInput) &&
         (roleInput === '' || member.role === roleInput) &&
-        (week1Input === '' || member.firstWeekGroup === parseInt(week1Input)) && 
+        (week1Input === '' || member.firstWeekGroup === parseInt(week1Input)) &&
         (week2Input === '' || member.secondWeekGroup === parseInt(week2Input))
     );
 
-    renderTable(members); // 필터링된 결과로 테이블 다시 렌더링
+    renderTable(members);
 });
 
 // 초기화 기능
@@ -92,18 +89,16 @@ document.getElementById('reset-btn').addEventListener('click', () => {
         select.value = "";
     });
 
-    members = loadMembers(); // 초기화 시 원래 members로 돌아오게
-    renderTable(members);
+    renderTable(loadMembers());
 });
 
 // 선택 삭제 기능
 document.getElementById('delete-btn').addEventListener('click', () => {
-    const updatedMembers = members.filter((member, index) => {
+    const members = loadMembers().filter((member, index) => {
         const rowCheckbox = document.querySelectorAll('tbody input[type="checkbox"]')[index];
-        return !rowCheckbox.checked; // 체크되지 않은 항목만 남기기
+        return !rowCheckbox.checked;
     });
 
-    members = updatedMembers;
     saveMembers(members);
     renderTable(members);
 });
@@ -113,7 +108,7 @@ function renderTable(data) {
     const tBody = document.querySelector("tbody");
     tBody.innerHTML = '';
 
-    data.forEach (member => {
+    data.forEach(member => {
         const tr = document.createElement("tr");
 
         const checkTd = document.createElement("td");
@@ -130,8 +125,8 @@ function renderTable(data) {
         checkTd.appendChild(checkbox);
 
         const githubLink = document.createElement("a");
-        githubLink.href = `https://github.com/${member.github}`; 
-        githubLink.target = "_blank"; 
+        githubLink.href = `https://github.com/${member.github}`;
+        githubLink.target = "_blank";
         githubLink.textContent = member.github;
         githubTd.appendChild(githubLink);
 
@@ -177,7 +172,6 @@ const modal = document.querySelector('.modal');
 const modalOpen = document.querySelector('#add-btn');
 const modalClose = document.querySelector('.close-btn');
 
-// 모달 열기
 modalOpen.addEventListener('click', function() {
     modal.style.display = 'block';
 });
@@ -189,4 +183,3 @@ modal.addEventListener('click', (event) => {
         closeModal();
     }
 });
-
