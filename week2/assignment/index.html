@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원 관리 페이지</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <header class="header-container">
+        <a href="#" class="header-item header-left">
+            <img src="./assets/icons/menu.png" alt="로고">
+        </a>
+        <h2 class="header-item header-middle">회원 관리 페이지</h2>
+        <h4 class="header-item header-right">🍓 AND SOPT YB 김다현 🍓</h4>
+    </header>
+
+    <div class="modal">
+        <div class="modal-popup">
+            <div class="modal-title-container">
+                <h3 class="modal-title">새 멤버 추가</h3>
+                <img src="./assets/icons/close.png" alt="닫기" class="close-btn" />
+            </div>
+            <div class="modal-input-container">
+                <div class="modal-input-title">이름</div>
+                <input type="text" id="modal-name" class="modal-input" placeholder="이름을 입력하세요">
+                <div class="modal-input-title">영문 이름</div>
+                <input type="text" id="modal-english-name" class="modal-input" placeholder="영문 이름을 입력하세요">
+                <div class="modal-input-title">GitHub ID</div>
+                <input type="text" id="modal-github" class="modal-input" placeholder="GitHub ID를 입력하세요">
+                <div class="modal-input-title">성별</div>
+                <select id="modal-gender" class="modal-input">
+                    <option value="" selected disabled hidden>성별 선택</option>
+                    <option value="female">여자</option>
+                    <option value="male">남자</option>
+                </select>
+                <div class="modal-input-title">역할</div>
+                <select id="modal-role" class="modal-input">
+                    <option value="" selected disabled hidden>OB / YB 선택</option>
+                    <option value="OB">OB</option>
+                    <option value="YB">YB</option>
+                </select>
+                <div class="modal-input-title">1주차 금잔디조</div>
+                <input type="number" id="modal-first-week" class="modal-input" placeholder="1주차 금잔디조를 입력하세요 (1-9)">
+                <div class="modal-input-title">2주차 금잔디조</div>
+                <input type="number" id="modal-second-week" class="modal-input" placeholder="2주차 금잔디조를 입력하세요 (1-9)">
+                <button type="button" class="modal-add-btn">추가</button>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <section class="filter-container">
+            <div class="grid-container">
+                <div class="input-container">
+                    <div class="input-title">이름</div>
+                    <input type="text" class="filter-input" name="name" placeholder="이름을 입력하세요">
+                </div>
+
+                <div class="input-container">
+                    <div class="input-title">영문 이름</div>
+                    <input type="text" class="filter-input" name="engname" placeholder="영문이름을 입력하세요">
+                </div>
+
+                <div class="input-container">
+                    <div class="input-title">GitHub</div>
+                    <input type="text" class="filter-input" name="github" placeholder="GitHub ID를 입력하세요">
+                </div>
+
+                <div class="input-container">
+                    <div class="input-title">성별</div>
+                    <select class="filter-input" name="gender">
+                        <option value="" selected disabled hidden>성별 선택</option>
+                        <option value="female">여자</option>
+                        <option value="male">남자</option>
+                    </select>
+                </div>
+
+                <div class="input-container">
+                    <div class="input-title">역할</div>
+                    <select class="filter-input" name="role">
+                        <option value="" selected disabled hidden>OB / YB 선택</option>
+                        <option value="OB">OB</option>
+                        <option value="YB">YB</option>
+                    </select>
+                </div>
+
+                <div class="input-container">
+                    <div class="input-title" name="week1">1주차 금잔디조</div>
+                    <input type="number" class="filter-input" name="week1" placeholder="1주차 금잔디조를 입력하세요 (1~9)">
+                </div>
+
+                <div class="input-container">
+                    <div class="input-title" name="week2">2주차 금잔디조</div>
+                    <input type="number" class="filter-input" name="week2" placeholder="2주차 금잔디조를 입력하세요 (1~9)">
+                </div>
+            </div>
+
+            <div class="filter-btn-container">
+                <button class="filter-btn-style" id="reset-btn">초기화</button>
+                <button class="filter-btn-style" id="search-btn">검색</button>
+            </div>
+        </section>
+
+        <section class="edit-btn-container">
+            <button class="edit-btn-style" id="delete-btn">선택 삭제</button>
+            <button class="edit-btn-style" id="add-btn">추가</button>
+        </section>
+        
+        <section class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" class="all-check"/>
+                        </th>
+                        <th>이름</th>
+                        <th>영문 이름</th>
+                        <th>GitHub</th>
+                        <th>성별</th>
+                        <th>역할</th>
+                        <th>1주차 금잔디</th>
+                        <th>2주차 금잔디</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+    </main>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
