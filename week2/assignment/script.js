@@ -94,14 +94,20 @@ document.getElementById('reset-btn').addEventListener('click', () => {
 
 // 선택 삭제 기능
 document.getElementById('delete-btn').addEventListener('click', () => {
-    const members = loadMembers().filter((member, index) => {
-        const rowCheckbox = document.querySelectorAll('tbody input[type="checkbox"]')[index];
-        return !rowCheckbox.checked;
+    const members = loadMembers();
+    const updatedMembers = members.filter(member => {
+        const checkbox = document.querySelector(`input[type="checkbox"][data-id="${member.id}"]`);
+        return checkbox === null || !checkbox.checked; // checkbox가 없거나 체크되지 않은 항목만 남기기
     });
 
-    saveMembers(members);
-    renderTable(members);
+    saveMembers(updatedMembers);
+    renderTable(updatedMembers);
+
+    // 검색 필드 초기화
+    document.querySelectorAll("input[type='text']").forEach(input => input.value = "");
+    document.querySelectorAll("select").forEach(select => select.value = "");
 });
+
 
 // 테이블 렌더링 함수
 function renderTable(data) {
@@ -122,6 +128,7 @@ function renderTable(data) {
 
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
+        checkbox.setAttribute('data-id', member.id); // 고유 id를 data-id 속성으로 설정
         checkTd.appendChild(checkbox);
 
         const githubLink = document.createElement("a");
