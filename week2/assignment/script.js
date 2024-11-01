@@ -177,16 +177,16 @@ const modal = document.querySelector('.modal');
 const modalOpen = document.querySelector('#add-btn');
 const modalClose = document.querySelector('.close-btn');
 
+// 모달 열기
 modalOpen.addEventListener('click', function() {
     modal.style.display = 'block';
 });
 
-modalClose.addEventListener('click', function() {
-    modal.style.display = 'none';
-});
+modalClose.addEventListener('click', closeModal);
 
 modal.addEventListener('click', (event) => {
     if (event.target === modal) {
         closeModal();
     }
 });
+
