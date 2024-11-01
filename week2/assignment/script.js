@@ -11,13 +11,14 @@ function saveMembers(data) {
     localStorage.setItem('membersData', JSON.stringify(data));
 }
 
-// 문서 로딩되면 바로 테이블 렌더링 되게
-document.addEventListener('DOMContentLoaded', () => {
+// 테이블 초기 렌더링
+document.addEventListener('DOMContentLoaded', handleDOMContentLoaded);
+function handleDOMContentLoaded() {
     renderTable(loadMembers());
-});
+}
 
-// 모달 내 기능
-document.querySelector('.modal-add-btn').addEventListener('click', () => {
+// 모달에서 새 멤버 추가 기능
+function handleAddMember() {
     const name = document.getElementById('modal-name').value;
     const englishName = document.getElementById('modal-english-name').value;
     const github = document.getElementById('modal-github').value;
@@ -33,7 +34,7 @@ document.querySelector('.modal-add-btn').addEventListener('click', () => {
 
     const members = loadMembers();
     const newMember = {
-        id: members.length + 1,
+        id: Date.now(), // 원래 사용하던 배열 대신 date.now를 통해 고유 id 생성, 이렇게 하면 고유성이 보장됨
         name,
         englishName,
         github,
@@ -47,7 +48,7 @@ document.querySelector('.modal-add-btn').addEventListener('click', () => {
     saveMembers(members);
     renderTable(members);
     closeModal();
-});
+}
 
 // 모달 닫기 함수
 function closeModal() {
@@ -58,7 +59,7 @@ function closeModal() {
 }
 
 // 검색 기능
-document.getElementById('search-btn').addEventListener('click', () => {
+function handleSearch() {
     const nameInput = document.querySelector('input[name="name"]').value.toLowerCase();
     const engnameInput = document.querySelector('input[name="engname"]').value.toLowerCase();
     const githubInput = document.querySelector('input[name="github"]').value.toLowerCase();
@@ -78,36 +79,27 @@ document.getElementById('search-btn').addEventListener('click', () => {
     );
 
     renderTable(members);
-});
+}
 
 // 초기화 기능
-document.getElementById('reset-btn').addEventListener('click', () => {
-    document.querySelectorAll("input").forEach(input => {
-        input.value = "";
-    });
-    document.querySelectorAll("select").forEach(select => {
-        select.value = "";
-    });
-
+function handleReset() {
+    document.querySelectorAll("input").forEach(input => input.value = "");
+    document.querySelectorAll("select").forEach(select => select.value = "");
     renderTable(loadMembers());
-});
+}
 
 // 선택 삭제 기능
-document.getElementById('delete-btn').addEventListener('click', () => {
+function handleDeleteSelected() {
     const members = loadMembers();
     const updatedMembers = members.filter(member => {
         const checkbox = document.querySelector(`input[type="checkbox"][data-id="${member.id}"]`);
-        return checkbox === null || !checkbox.checked; // checkbox가 없거나 체크되지 않은 항목만 남기기
+        return !checkbox || !checkbox.checked; // checkbox가 없거나 체크되지 않은 항목만 남기기
     });
 
     saveMembers(updatedMembers);
     renderTable(updatedMembers);
-
-    // 검색 필드 초기화
-    document.querySelectorAll("input[type='text']").forEach(input => input.value = "");
-    document.querySelectorAll("select").forEach(select => select.value = "");
-});
-
+    handleReset();
+}
 
 // 테이블 렌더링 함수
 function renderTable(data) {
@@ -156,6 +148,11 @@ function renderTable(data) {
         tBody.appendChild(tr);
     });
 
+    setupCheckboxListeners();
+}
+
+// 전체 체크박스 설정
+function setupCheckboxListeners() {
     const allCheckBox = document.querySelector('.all-check');
     const memberCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]');
 
@@ -174,19 +171,28 @@ function renderTable(data) {
     });
 }
 
-// 모달 열고 닫기 기능
-const modal = document.querySelector('.modal');
-const modalOpen = document.querySelector('#add-btn');
-const modalClose = document.querySelector('.close-btn');
-
-modalOpen.addEventListener('click', function() {
+// 모달 열기 함수
+function openModal() {
+    const modal = document.querySelector('.modal');
     modal.style.display = 'block';
-});
+}
 
-modalClose.addEventListener('click', closeModal);
-
-modal.addEventListener('click', (event) => {
+// 모달 닫기 기능을 처리하는 함수
+function handleModalClose(event) {
+    const modal = document.querySelector('.modal');
     if (event.target === modal) {
         closeModal();
     }
-});
+}
+
+// 이벤트 리스너
+document.querySelector('.modal-add-btn').addEventListener('click', handleAddMember);
+document.getElementById('search-btn').addEventListener('click', handleSearch);
+document.getElementById('reset-btn').addEventListener('click', handleReset);
+document.getElementById('delete-btn').addEventListener('click', handleDeleteSelected);
+
+const modalOpen = document.querySelector('#add-btn');
+const modalClose = document.querySelector('.close-btn');
+modalOpen.addEventListener('click', openModal);
+modalClose.addEventListener('click', closeModal);
+document.querySelector('.modal').addEventListener('click', handleModalClose);
