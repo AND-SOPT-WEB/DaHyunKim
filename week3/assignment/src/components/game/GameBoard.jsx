@@ -19,6 +19,11 @@ const Cell = styled.div`
   font-size: 1.5rem;
   font-family: ${(props) => props.theme.fonts.Aftika};
   cursor: pointer;
+
+  &:active {
+    background-color: ${(props) => props.theme.colors.gray}; 
+    transform: scale(0.95); 
+  }
 `;
 
 const GameBoard = ({ numbers, onCellClick }) => {
