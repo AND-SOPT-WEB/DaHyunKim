@@ -9,7 +9,12 @@ import useTimer from './hooks/useTimer';
 
 function App() {
   const [selectedMenu, setSelectedMenu] = useState("게임");
+  const [level, setLevel] = useState(1); 
   const { time, startTimer, stopTimer, resetTimer, isRunning } = useTimer();
+
+  const handleLevelChange = (event) => {
+    setLevel(Number(event.target.value));
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -17,15 +22,19 @@ function App() {
       <Header 
         selectedMenu={selectedMenu} 
         setSelectedMenu={setSelectedMenu} 
-        time={time} 
+        time={parseFloat(time.toFixed(2))}
         isGameStarted={isRunning} 
+        onLevelChange={handleLevelChange} 
       />
       {selectedMenu === "게임" && (
-        <GamePage startTimer={startTimer}
-        stopTimer={stopTimer}
-        resetTimer={resetTimer}
-        onGameEnd={resetTimer}
-        time={time} />
+        <GamePage 
+          key={level} 
+          startTimer={startTimer}
+          stopTimer={stopTimer}
+          resetTimer={resetTimer}
+          time={time} 
+          level={level}
+        />
       )}
       {selectedMenu === "랭킹" && <RankingPage />}
     </ThemeProvider>
