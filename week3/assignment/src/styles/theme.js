@@ -7,7 +7,7 @@ const theme = {
       black: "#000000",
     },
     fonts: {
-      logo: "Aftika, sans-serif",
+      Aftika: "Aftika, sans-serif",
     },
   };
   
