@@ -13,10 +13,18 @@ const GamePageContainer = styled.div`
   margin-top: 2rem;
 `;
 
-const GamePage = ({ startTimer, stopTimer, time }) => {
-  const [isGameEnded, setIsGameEnded] = useState(false);
-  const [playTime, setPlayTime] = useState(null); 
-  const { numbers, updateNumbers, nextNumber } = useShuffledNumbers([1, 9], [10, 9]); 
+const GamePage = ({ startTimer, stopTimer, resetTimer, time }) => {
+    const [isGameEnded, setIsGameEnded] = useState(false);
+    const [playTime, setPlayTime] = useState(null);
+    const { numbers, updateNumbers, nextNumber, resetNumbers } = useShuffledNumbers([1, 9], [10, 9]);
+
+   // 게임 초기화 함수
+   const resetGame = () => {
+    resetTimer(); // 타이머 초기화
+    setIsGameEnded(false); // 게임 종료 상태 초기화
+    setPlayTime(null); // 걸린 시간 초기화
+    resetNumbers(); // 숫자 배열 초기화
+  };
 
   const handleCellClick = (number) => {
     if (number === 1) {
@@ -35,9 +43,9 @@ const GamePage = ({ startTimer, stopTimer, time }) => {
 
   return (
     <GamePageContainer>
-      <NextNumber nextNumber={nextNumber} />
+    <NextNumber nextNumber={nextNumber} />
       <GameBoard numbers={numbers} onCellClick={handleCellClick} />
-      {isGameEnded && <GameEndModal playTime={playTime} onClose={() => setIsGameEnded(false)} />}
+      {isGameEnded && <GameEndModal playTime={playTime} onClose={resetGame} />} 
     </GamePageContainer>
   );
 };
@@ -45,6 +53,7 @@ const GamePage = ({ startTimer, stopTimer, time }) => {
 GamePage.propTypes = {
   startTimer: PropTypes.func.isRequired,
   stopTimer: PropTypes.func.isRequired,
+  resetTimer: PropTypes.func.isRequired, 
   time: PropTypes.number.isRequired,
 };
 

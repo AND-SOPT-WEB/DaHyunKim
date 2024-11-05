@@ -21,7 +21,11 @@ function App() {
         isGameStarted={isRunning} 
       />
       {selectedMenu === "게임" && (
-        <GamePage startTimer={startTimer} stopTimer={stopTimer} onGameEnd={resetTimer}  time={time} />
+        <GamePage startTimer={startTimer}
+        stopTimer={stopTimer}
+        resetTimer={resetTimer}
+        onGameEnd={resetTimer}
+        time={time} />
       )}
       {selectedMenu === "랭킹" && <RankingPage />}
     </ThemeProvider>
