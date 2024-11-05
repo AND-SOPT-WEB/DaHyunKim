@@ -13,9 +13,9 @@ const GamePageContainer = styled.div`
   margin-top: 2rem;
 `;
 
-const GamePage = ({ startTimer, stopTimer, resetTimer, time }) => {
+const GamePage = ({ startTimer, stopTimer, resetTimer, time, level }) => {
   const { numbers, updateNumbers, nextNumber, resetNumbers } = useShuffledNumbers([1, 9], [10, 9]);
-  const { isGameEnded, playTime, endGame, resetGame } = useGameStatus(resetTimer, resetNumbers);
+  const { isGameEnded, playTime, endGame, resetGame } = useGameStatus(resetTimer, resetNumbers, level);
 
   const handleCellClick = (number) => {
     if (number === 1) {
@@ -24,7 +24,7 @@ const GamePage = ({ startTimer, stopTimer, resetTimer, time }) => {
 
     if (number === 18) { // 마지막 숫자(18)일 때 게임 종료
       stopTimer();
-      endGame(time); // endGame 호출하여 종료 상태 업데이트
+      endGame(time); 
       return; // 함수 종료
     }
 
@@ -35,7 +35,7 @@ const GamePage = ({ startTimer, stopTimer, resetTimer, time }) => {
     <GamePageContainer>
       <NextNumber nextNumber={nextNumber} />
       <GameBoard numbers={numbers} onCellClick={handleCellClick} />
-      {isGameEnded && <GameEndModal playTime={playTime} onClose={resetGame} />} 
+      {isGameEnded && <GameEndModal playTime={playTime} onClose={resetGame} />}
     </GamePageContainer>
   );
 };
@@ -45,7 +45,7 @@ GamePage.propTypes = {
   stopTimer: PropTypes.func.isRequired,
   resetTimer: PropTypes.func.isRequired,
   time: PropTypes.number.isRequired,
+  level: PropTypes.number.isRequired,
 };
 
 export default GamePage;
-
