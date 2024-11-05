@@ -26,7 +26,7 @@ const Logo = styled.div`
   line-height: normal;
   letter-spacing: -0.06rem;
   color: ${(props) => props.theme.colors.white};
-  font-family: ${(props) => props.theme.fonts.logo};
+  font-family: ${(props) => props.theme.fonts.Aftika};
 `;
 
 const MenuContainer = styled.div`
@@ -53,7 +53,6 @@ const MenuItem = styled.div`
   }
 `;
 
-
 const LevelSelect = styled.select`
   padding: 0.5rem;
   border-radius: 0.4rem;
@@ -63,7 +62,7 @@ const Timer = styled.div`
   color: ${(props) => props.theme.colors.white};
 `;
 
-const Header = ({ selectedMenu, setSelectedMenu }) => {
+const Header = ({ selectedMenu, setSelectedMenu, time, isGameStarted = false }) => {
     return (
       <HeaderContainer>
         <LeftSection>
@@ -84,17 +83,18 @@ const Header = ({ selectedMenu, setSelectedMenu }) => {
               <option>Level 2</option>
               <option>Level 3</option>
             </LevelSelect>
-            <Timer>00:00</Timer>
+            <Timer>{isGameStarted ? time.toFixed(2) : "0"}</Timer> 
           </RightSection>
         )}
       </HeaderContainer>
     );
   };
   
-
 Header.propTypes = {
   selectedMenu: PropTypes.string.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
+  time: PropTypes.number.isRequired,  
+  isGameStarted: PropTypes.bool.isRequired,    
 };
 
 export default Header;
