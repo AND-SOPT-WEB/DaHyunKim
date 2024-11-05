@@ -23,13 +23,14 @@ const GamePage = ({ startTimer, stopTimer, time }) => {
       startTimer();
     }
 
-    if (number === 18) { // 마지막 숫자(18)일 때 게임 종료
-      stopTimer();
-      setPlayTime(time.toFixed(2)); // 게임 종료할 때 시간을 playTime에 저장
-      setIsGameEnded(true);
-    }
+  if (number === 18) { // 마지막 숫자(18)일 때 게임 종료
+    stopTimer();
+    setPlayTime(time.toFixed(2)); // 게임 종료할 때 시간을 playTime에 저장
+    setIsGameEnded(true);
+    return; // 함수 종료
+  }
 
-    updateNumbers(number);
+    updateNumbers(number); // 마지막 숫자가 아닌 경우에만 호출
   };
 
   return (
