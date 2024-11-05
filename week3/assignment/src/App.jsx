@@ -9,7 +9,7 @@ import useTimer from './hooks/useTimer';
 
 function App() {
   const [selectedMenu, setSelectedMenu] = useState("게임");
-  const { time, startTimer, isRunning } = useTimer();
+  const { time, startTimer, stopTimer, resetTimer, isRunning } = useTimer();
 
   return (
     <ThemeProvider theme={theme}>
@@ -21,7 +21,7 @@ function App() {
         isGameStarted={isRunning} 
       />
       {selectedMenu === "게임" && (
-        <GamePage startTimer={startTimer} />
+        <GamePage startTimer={startTimer} stopTimer={stopTimer} onGameEnd={resetTimer}  time={time} />
       )}
       {selectedMenu === "랭킹" && <RankingPage />}
     </ThemeProvider>

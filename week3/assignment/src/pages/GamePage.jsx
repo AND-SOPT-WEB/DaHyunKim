@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types'; 
+import PropTypes from 'prop-types';
 import GameBoard from '../components/game/GameBoard';
 import NextNumber from '../components/game/NextNumber';
 import useShuffledNumbers from '../hooks/useShuffledNumbers';
+import GameEndModal from '../components/game/GameEndModal';
 
 const GamePageContainer = styled.div`
   display: flex;
@@ -11,26 +13,38 @@ const GamePageContainer = styled.div`
   margin-top: 2rem;
 `;
 
-const GamePage = ({ startTimer }) => {
-  const { numbers, updateNumbers, nextNumber } = useShuffledNumbers([1, 9], [10, 9]);
+const GamePage = ({ startTimer, stopTimer, time }) => {
+  const [isGameEnded, setIsGameEnded] = useState(false);
+  const [playTime, setPlayTime] = useState(null); 
+  const { numbers, updateNumbers, nextNumber } = useShuffledNumbers([1, 9], [10, 9]); 
 
   const handleCellClick = (number) => {
-    if (number === 1) { 
-      startTimer(); // 1을 클릭하면 타이머를 시작함
+    if (number === 1) {
+      startTimer();
     }
-    updateNumbers(number); 
+
+    if (number === 18) { // 마지막 숫자(18)일 때 게임 종료
+      stopTimer();
+      setPlayTime(time.toFixed(2)); // 게임 종료할 때 시간을 playTime에 저장
+      setIsGameEnded(true);
+    }
+
+    updateNumbers(number);
   };
 
   return (
     <GamePageContainer>
       <NextNumber nextNumber={nextNumber} />
       <GameBoard numbers={numbers} onCellClick={handleCellClick} />
+      {isGameEnded && <GameEndModal playTime={playTime} onClose={() => setIsGameEnded(false)} />}
     </GamePageContainer>
   );
 };
 
 GamePage.propTypes = {
   startTimer: PropTypes.func.isRequired,
+  stopTimer: PropTypes.func.isRequired,
+  time: PropTypes.number.isRequired,
 };
 
 export default GamePage;
