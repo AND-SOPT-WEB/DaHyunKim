@@ -10,7 +10,7 @@ const useGameStatus = (resetTimer, resetNumbers, level) => {
     setPlayTime(formattedTime); 
     setIsGameEnded(true); 
 
-    // 현재 시각, 레벨, 플레이 시간 정보 저장
+    // 현재 시각, 레벨, 플레이 시간 정보 저장겡
     const gameData = {
       timestamp: new Date().toISOString(), // 현재 시각
       level: level, // 현재 레벨
