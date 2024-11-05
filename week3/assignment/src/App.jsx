@@ -2,19 +2,27 @@ import { useState } from 'react';
 import { ThemeProvider } from 'styled-components';
 import theme from './styles/theme';
 import GlobalStyle from './styles/globalStyles';
-import Header from './components/Header/header';
+import Header from './components/header/Header';
 import GamePage from './pages/GamePage';
 import RankingPage from './pages/RankingPage';
-
+import useTimer from './hooks/useTimer';
 
 function App() {
   const [selectedMenu, setSelectedMenu] = useState("게임");
+  const { time, startTimer, isRunning } = useTimer();
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <Header selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} />
-      {selectedMenu === "게임" && <GamePage />}
+      <Header 
+        selectedMenu={selectedMenu} 
+        setSelectedMenu={setSelectedMenu} 
+        time={time} 
+        isGameStarted={isRunning} 
+      />
+      {selectedMenu === "게임" && (
+        <GamePage startTimer={startTimer} />
+      )}
       {selectedMenu === "랭킹" && <RankingPage />}
     </ThemeProvider>
   );
