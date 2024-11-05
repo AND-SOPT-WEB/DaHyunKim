@@ -18,18 +18,21 @@ const GamePage = ({ startTimer, stopTimer, resetTimer, time, level }) => {
   const { isGameEnded, playTime, endGame, resetGame } = useGameStatus(resetTimer, resetNumbers, level);
 
   const handleCellClick = (number) => {
-    if (number === 1) {
-      startTimer();
+    if (number === nextNumber) { 
+      if (number === 1) {
+        startTimer();
+      }
+  
+      if (number === 18) { // 모든 숫자를 다 누르고나서 마지막 숫자인 18일 때 게임 종료
+        stopTimer();
+        endGame(time);
+        return;
+      }
+  
+      updateNumbers(number); 
     }
-
-    if (number === 18) { // 마지막 숫자(18)일 때 게임 종료
-      stopTimer();
-      endGame(time); 
-      return; // 함수 종료
-    }
-
-    updateNumbers(number); // 마지막 숫자가 아닌 경우에만 호출
   };
+  
 
   return (
     <GamePageContainer>
