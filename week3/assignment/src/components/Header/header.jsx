@@ -62,7 +62,7 @@ const Timer = styled.div`
   color: ${(props) => props.theme.colors.white};
 `;
 
-const Header = ({ selectedMenu, setSelectedMenu, time, isGameStarted = false }) => {
+const Header = ({ selectedMenu, setSelectedMenu, time, isGameStarted, onLevelChange }) => {
     return (
       <HeaderContainer>
         <LeftSection>
@@ -78,10 +78,10 @@ const Header = ({ selectedMenu, setSelectedMenu, time, isGameStarted = false }) 
         </LeftSection>
         {selectedMenu === "게임" && (
           <RightSection>
-            <LevelSelect>
-              <option>Level 1</option>
-              <option>Level 2</option>
-              <option>Level 3</option>
+            <LevelSelect onChange={onLevelChange}> 
+              <option value={1}>Level 1</option>
+              <option value={2}>Level 2</option>
+              <option value={3}>Level 3</option>
             </LevelSelect>
             <Timer>{isGameStarted ? time.toFixed(2) : "0"}</Timer> 
           </RightSection>
@@ -90,11 +90,13 @@ const Header = ({ selectedMenu, setSelectedMenu, time, isGameStarted = false }) 
     );
   };
   
+  
 Header.propTypes = {
   selectedMenu: PropTypes.string.isRequired,
   setSelectedMenu: PropTypes.func.isRequired,
   time: PropTypes.number.isRequired,  
   isGameStarted: PropTypes.bool.isRequired,    
+  onLevelChange: PropTypes.func.isRequired,
 };
 
 export default Header;
