@@ -40,6 +40,7 @@ const ConfirmButton = styled.button`
   padding: 0.3rem;
   border-radius: 0.5rem;
   margin-top: 0.7rem;
+  cursor: pointer:
 `;
 
 const GameEndModal = ({ playTime, onClose }) => {
