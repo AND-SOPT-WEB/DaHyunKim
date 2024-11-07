@@ -14,7 +14,7 @@ const GamePageContainer = styled.div`
 `;
 
 const GamePage = ({ startTimer, stopTimer, resetTimer, time, level }) => {
-  const { numbers, updateNumbers, nextNumber, resetNumbers } = useShuffledNumbers([1, 9], [10, 9]);
+  const { numbers, updateNumbers, nextNumber, resetNumbers, isNew } = useShuffledNumbers([1, 9], [10, 9]); // isNew 추가
   const { isGameEnded, playTime, endGame, resetGame } = useGameStatus(resetTimer, resetNumbers, level);
 
   const handleCellClick = (number) => {
@@ -37,7 +37,7 @@ const GamePage = ({ startTimer, stopTimer, resetTimer, time, level }) => {
   return (
     <GamePageContainer>
       <NextNumber nextNumber={nextNumber} />
-      <GameBoard numbers={numbers} onCellClick={handleCellClick} />
+      <GameBoard numbers={numbers} onCellClick={handleCellClick} isNew={isNew} /> {/* isNew 전달 */}
       {isGameEnded && <GameEndModal playTime={playTime} onClose={resetGame} />}
     </GamePageContainer>
   );

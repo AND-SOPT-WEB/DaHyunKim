@@ -9,16 +9,20 @@ const GameBoardContainer = styled.div`
   margin-top: 1rem;
 `;
 
+// 스타일에만 사용되는 $isNew 및 $isVisible props
 const Cell = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 6rem;
   height: 6rem;
-  background-color: ${(props) => props.theme.colors.lightGray};
+  color: ${({ theme, $isNew }) => ($isNew ? theme.colors.white : theme.colors.black)};
+  background-color: ${({ theme, $isNew }) => ($isNew ? theme.colors.darkGray : theme.colors.lightGray)};
   font-size: 1.5rem;
   font-family: ${(props) => props.theme.fonts.Aftika};
   cursor: pointer;
+  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)}; 
+  pointer-events: ${({ $isVisible }) => ($isVisible ? 'auto' : 'none')}; 
 
   &:active {
     background-color: ${(props) => props.theme.colors.gray}; 
@@ -26,11 +30,16 @@ const Cell = styled.div`
   }
 `;
 
-const GameBoard = ({ numbers, onCellClick }) => {
+const GameBoard = ({ numbers, onCellClick, isNew }) => {
   return (
     <GameBoardContainer>
       {numbers.map((number, index) => (
-        <Cell key={index} onClick={() => onCellClick(number)}>
+        <Cell
+          key={index}
+          $isNew={isNew[index]} // 스타일 prop에 $ 접두사를 사용하여 스타일에만 적용
+          $isVisible={number !== null} // number가 null이면 투명하게 처리
+          onClick={() => number !== null && onCellClick(number)}
+        >
           {number}
         </Cell>
       ))}
@@ -41,6 +50,7 @@ const GameBoard = ({ numbers, onCellClick }) => {
 GameBoard.propTypes = {
   numbers: PropTypes.arrayOf(PropTypes.number).isRequired,
   onCellClick: PropTypes.func.isRequired,
+  isNew: PropTypes.arrayOf(PropTypes.bool).isRequired,
 };
 
 export default GameBoard;
