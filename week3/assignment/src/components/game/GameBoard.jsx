@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 
 const GameBoardContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  max-width: 19.5rem;
+  grid-template-columns: repeat(${(props) => props.gridSize}, 1fr);
+  max-width: ${(props) => props.gridSize * 6.5}rem;
   gap: 0.5rem;
   margin-top: 1rem;
 `;
 
-// 스타일에만 사용되는 $isNew 및 $isVisible props
 const Cell = styled.div`
   display: flex;
   align-items: center;
@@ -30,14 +29,14 @@ const Cell = styled.div`
   }
 `;
 
-const GameBoard = ({ numbers, onCellClick, isNew }) => {
+const GameBoard = ({ numbers, onCellClick, isNew, gridSize }) => {
   return (
-    <GameBoardContainer>
+    <GameBoardContainer gridSize={gridSize}>
       {numbers.map((number, index) => (
         <Cell
           key={index}
-          $isNew={isNew[index]} // 스타일 prop에 $ 접두사를 사용하여 스타일에만 적용
-          $isVisible={number !== null} // number가 null이면 투명하게 처리
+          $isNew={isNew[index]}
+          $isVisible={number !== null}
           onClick={() => number !== null && onCellClick(number)}
         >
           {number}
@@ -51,6 +50,7 @@ GameBoard.propTypes = {
   numbers: PropTypes.arrayOf(PropTypes.number).isRequired,
   onCellClick: PropTypes.func.isRequired,
   isNew: PropTypes.arrayOf(PropTypes.bool).isRequired,
+  gridSize: PropTypes.number.isRequired, 
 };
 
 export default GameBoard;

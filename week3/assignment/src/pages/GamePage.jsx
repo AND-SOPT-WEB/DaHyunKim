@@ -14,7 +14,16 @@ const GamePageContainer = styled.div`
 `;
 
 const GamePage = ({ startTimer, stopTimer, resetTimer, time, level }) => {
-  const { numbers, updateNumbers, nextNumber, resetNumbers, isNew } = useShuffledNumbers([1, 9], [10, 9]); // isNew 추가
+
+  // levelSettings를 GamePage 컴포넌트 내부에 둘지, 분리할지 고민이에요
+  const levelSettings = {
+    1: { initialRange: [1, 9], remainingRange: [10, 9], gridSize: 3 }, 
+    2: { initialRange: [1, 16], remainingRange: [17, 16], gridSize: 4 }, 
+    3: { initialRange: [1, 25], remainingRange: [26, 25], gridSize: 5 }, 
+  };
+
+  const { initialRange, remainingRange, gridSize } = levelSettings[level];
+  const { numbers, updateNumbers, nextNumber, resetNumbers, isNew } = useShuffledNumbers(initialRange, remainingRange);
   const { isGameEnded, playTime, endGame, resetGame } = useGameStatus(resetTimer, resetNumbers, level);
 
   const handleCellClick = (number) => {
@@ -22,22 +31,19 @@ const GamePage = ({ startTimer, stopTimer, resetTimer, time, level }) => {
       if (number === 1) {
         startTimer();
       }
-  
-      if (number === 18) { // 모든 숫자를 다 누르고나서 마지막 숫자인 18일 때 게임 종료
+      if (number === initialRange[1] + remainingRange[1]) { // 레벨별 마지막 숫자에 맞춰 종료하기
         stopTimer();
         endGame(time);
         return;
       }
-  
       updateNumbers(number); 
     }
   };
-  
 
   return (
     <GamePageContainer>
       <NextNumber nextNumber={nextNumber} />
-      <GameBoard numbers={numbers} onCellClick={handleCellClick} isNew={isNew} /> {/* isNew 전달 */}
+      <GameBoard numbers={numbers} onCellClick={handleCellClick} isNew={isNew} gridSize={gridSize} />
       {isGameEnded && <GameEndModal playTime={playTime} onClose={resetGame} />}
     </GamePageContainer>
   );
