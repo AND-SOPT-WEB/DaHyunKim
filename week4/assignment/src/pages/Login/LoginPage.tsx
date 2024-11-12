@@ -1,5 +1,7 @@
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { userLogin } from '../../api/Login/userLogin';
 
 const Container = styled.div`
   display: flex;
@@ -61,15 +63,49 @@ const SignUpLink = styled(Link)`
 `;
 
 const LoginPage = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const response = await userLogin({ username, password });
+    
+      if (response.result?.token) {
+        alert('로그인 성공!');
+        localStorage.setItem('token', response.result.token);
+        navigate('/');
+      } else if (response.code === '01') {
+        alert('비밀번호가 틀렸습니다.');
+      } else if (response.code === '02') {
+        alert('로그인 요청 정보가 잘못되었습니다.');
+      }
+    } catch (err) {
+      alert('로그인 요청 중 오류가 발생했습니다.');
+    }
+  };
+
   return (
     <Container>
       <LoginTitle>로그인</LoginTitle>
-      <Form>
-        <Input type="text" placeholder="아이디" />
-        <Input type="password" placeholder="비밀번호" />
-        <LoginButton>로그인</LoginButton>
+      <Form onSubmit={handleLogin}>
+        <Input
+          type="text"
+          placeholder="아이디"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <Input
+          type="password"
+          placeholder="비밀번호"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <LoginButton type="submit">로그인</LoginButton>
       </Form>
-      <SignUpLink to="/signup">회원가입</SignUpLink> 
+      <SignUpLink to="/signup">회원가입</SignUpLink>
     </Container>
   );
 };
