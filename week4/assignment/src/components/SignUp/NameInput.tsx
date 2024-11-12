@@ -37,6 +37,7 @@ const ErrorMessage = styled.p`
 
 interface NameInputProps {
   onNext: () => void;
+  // React.Dispatch<React.SetStateAction<string>>는 문자열 상태를 업데이트하는 함수
   setUsername: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -44,15 +45,13 @@ const NameInput = ({ onNext, setUsername }: NameInputProps) => {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
 
-  // 입력 변경 시 이름 업데이트 및 유효성 검사
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setName(value);
-    setUsername(value); // 상위 컴포넌트의 상태 업데이트
+    setUsername(value); 
     setError(value.length > 8 ? '이름은 8자 이하로 입력해 주세요' : '');
   };
 
-  // "다음" 버튼 클릭 시 유효성 검사 후 onNext 호출
   const handleNext = () => {
     if (!error && name) {
       onNext();
