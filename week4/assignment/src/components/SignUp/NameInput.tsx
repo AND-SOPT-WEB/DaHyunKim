@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import NextButton from './NextButton';
 
@@ -9,7 +9,7 @@ const FormContainer = styled.div`
   width: 20rem;
 `;
 
-const Label = styled.label`
+const SubTitle = styled.div`
   font-size: 1rem;
   font-weight: 600;
   align-self: flex-start;
@@ -19,7 +19,7 @@ const Label = styled.label`
 const Input = styled.input`
   padding: 0.75rem;
   font-size: 1rem;
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: 1px solid ${({ theme }) => theme.colors.gray};
   border-radius: 4px;
   outline: none;
   width: 100%;
@@ -37,18 +37,22 @@ const ErrorMessage = styled.p`
 
 interface NameInputProps {
   onNext: () => void;
+  setUsername: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const NameInput = ({ onNext }: NameInputProps) => {
+const NameInput = ({ onNext, setUsername }: NameInputProps) => {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
 
+  // 입력 변경 시 이름 업데이트 및 유효성 검사
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setName(value);
+    setUsername(value); // 상위 컴포넌트의 상태 업데이트
     setError(value.length > 8 ? '이름은 8자 이하로 입력해 주세요' : '');
   };
 
+  // "다음" 버튼 클릭 시 유효성 검사 후 onNext 호출
   const handleNext = () => {
     if (!error && name) {
       onNext();
@@ -57,7 +61,7 @@ const NameInput = ({ onNext }: NameInputProps) => {
 
   return (
     <FormContainer>
-      <Label>이름</Label>
+      <SubTitle>이름</SubTitle>
       <Input
         type="text"
         placeholder="사용자 이름을 입력해 주세요"
@@ -66,8 +70,6 @@ const NameInput = ({ onNext }: NameInputProps) => {
       />
       {error && <ErrorMessage>{error}</ErrorMessage>}
       
-      {/* name이 비어 있는 경우 true */}
-      {/* error가 존재할 경우 true */}
       <NextButton onClick={handleNext} disabled={!name || !!error}>
         다음
       </NextButton>
@@ -75,7 +77,4 @@ const NameInput = ({ onNext }: NameInputProps) => {
   );
 };
 
-
-
 export default NameInput;
-
