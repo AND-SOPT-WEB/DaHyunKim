@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { getMyHobby, getOtherUserHobby } from '../../api/Hobby/userHobby';
 
 const PageContainer = styled.div`
   display: flex;
@@ -29,30 +30,68 @@ const Input = styled.input`
   border: 1px solid ${({ theme }) => theme.colors.gray};
 `;
 
-const MyHobbyText = styled.div`
+const HobbyText = styled.div`
   margin-top: 0.5rem;
   color: ${({ theme }) => theme.colors.black};
 `;
 
 const SearchButton = styled.button`
   margin-top: 1rem;
-  padding: 0.5rem 1rem;
+  width: 100%;
+  font-size: 1rem;
+  padding: 0.6rem 1rem;
   background-color: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.white};
   border: none;
+  border-radius: 5px;
   cursor: pointer;
 `;
 
 const Hobby = () => {
   const [userNumber, setUserNumber] = useState('');
-  const [hobby, setHobby] = useState('독서'); 
+  const [myHobby, setMyHobby] = useState('');
+  const [otherUserHobby, setOtherUserHobby] = useState('');
+  const [searchedUserNumber, setSearchedUserNumber] = useState('');
+  const token = localStorage.getItem('token') || '';
 
-  const handleSearch = () => {
+  useEffect(() => {
+    const fetchMyHobby = async () => {
+      try {
+        const response = await getMyHobby(token);
+        if (response.result?.hobby) {
+          setMyHobby(response.result.hobby);
+        } else {
+          setMyHobby('취미 정보가 없습니다.');
+        }
+      } catch {
+        alert('취미 정보를 불러오지 못했습니다.');
+      }
+    };
+
+    fetchMyHobby();
+  }, [token]);
+
+const handleSearch = async () => {
+    setOtherUserHobby('');
+  
     if (!userNumber) {
-      alert('사용자 번호를 입력해주세요');
+      alert('사용자 번호를 입력해주세요.');
       return;
     }
-    alert(`사용자 ${userNumber}의 취미를 검색합니다.`);
+  
+    try {
+      const response = await getOtherUserHobby(userNumber, token);
+      // hobby 데이터가 없으면 예외 발생
+      if (!response.result?.hobby) throw new Error();
+      
+      // hobby 데이터가 있으면 상태 업데이트
+      setOtherUserHobby(response.result.hobby);
+      setSearchedUserNumber(userNumber);
+  
+    } catch (error) {
+      alert('없는 데이터입니다.');
+      setSearchedUserNumber(userNumber);
+    }
   };
 
   return (
@@ -60,7 +99,7 @@ const Hobby = () => {
       <HobbyContent>
         <Title>취미</Title>
         <Subtitle>나의 취미</Subtitle>
-        <MyHobbyText>{hobby}</MyHobbyText>
+        <HobbyText>{myHobby}</HobbyText>
         <Subtitle>다른 사람들의 취미</Subtitle>
         <Input
           type="text"
@@ -69,6 +108,7 @@ const Hobby = () => {
           onChange={(e) => setUserNumber(e.target.value)}
         />
         <SearchButton onClick={handleSearch}>검색</SearchButton>
+        {otherUserHobby && <HobbyText>{`${searchedUserNumber}번 사용자의 취미: ${otherUserHobby}`}</HobbyText>}
       </HobbyContent>
     </PageContainer>
   );
