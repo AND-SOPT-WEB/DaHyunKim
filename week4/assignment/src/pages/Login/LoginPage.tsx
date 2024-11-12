@@ -27,7 +27,7 @@ const Form = styled.form`
 const Input = styled.input`
   padding: 0.75rem;
   font-size: 1rem;
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: 1px solid ${({ theme }) => theme.colors.gray};
   border-radius: 4px;
   outline: none;
   &:focus {
