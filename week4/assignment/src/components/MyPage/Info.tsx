@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { updateUserInfo } from '../../api/Info/userInfoUpdate';
 
 const PageContainer = styled.div`
   display: flex;
@@ -32,23 +34,43 @@ const Input = styled.input`
 
 const UpdateButton = styled.button`
   margin-top: 1rem;
-  padding: 0.5rem 1rem;
+  width: 100%;
+  font-size: 1rem;
+  padding: 0.6rem 1rem;
   background-color: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.white};
   border: none;
+  border-radius: 5px;
   cursor: pointer;
 `;
 
 const Info = () => {
   const [newPassword, setNewPassword] = useState('');
   const [newHobby, setNewHobby] = useState('');
+  const token = localStorage.getItem('token') || '';
+  const navigate = useNavigate();
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     if (!newPassword && !newHobby) {
-      alert('변경할 정보를 입력하세요');
+      alert('정보를 입력하세요');
       return;
     }
-    alert('정보가 수정되었습니다.');
+
+    const data: { password?: string; hobby?: string } = {};
+    if (newPassword) data.password = newPassword;
+    if (newHobby) data.hobby = newHobby;
+
+    try {
+      const response = await updateUserInfo(token, data);
+      if (response.code === '00') {
+        alert('수정 실패');
+      } else {
+        alert('정보 수정에 성공했습니다.');
+        navigate('/'); 
+      }
+    } catch {
+      alert('수정 요청 중 오류가 발생했습니다.');
+    }
   };
 
   return (
