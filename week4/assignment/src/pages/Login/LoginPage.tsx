@@ -76,7 +76,7 @@ const LoginPage = () => {
       if (response.result?.token) {
         alert('로그인 성공!');
         localStorage.setItem('token', response.result.token);
-        navigate('/');
+        navigate('/mypage');
       } else if (response.code === '01') {
         alert('비밀번호가 틀렸습니다.');
       } else if (response.code === '02') {
