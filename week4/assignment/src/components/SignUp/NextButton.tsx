@@ -6,12 +6,12 @@ interface NextButtonProps {
   children: React.ReactNode;
 }
 
-const StyledButton = styled.button<{ disabled: boolean }>`
+const StyledNextButton = styled.button<{ disabled: boolean }>`
   padding: 0.75rem;
   font-size: 1rem;
   color: ${({ theme }) => theme.colors.white};
   background-color: ${({ theme, disabled }) =>
-    disabled ? theme.colors.border : theme.colors.primary};
+    disabled ? theme.colors.gray : theme.colors.primary};
   border: none;
   border-radius: 4px;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
@@ -20,14 +20,14 @@ const StyledButton = styled.button<{ disabled: boolean }>`
   transition: background-color 0.3s;
   &:hover {
     background-color: ${({ theme, disabled }) =>
-      disabled ? theme.colors.border : theme.colors.primaryHover};
+      disabled ? theme.colors.gray : theme.colors.primaryHover};
   }
 `;
 
 const NextButton = ({ onClick, disabled, children }: NextButtonProps) => (
-  <StyledButton onClick={onClick} disabled={disabled}>
+  <StyledNextButton onClick={onClick} disabled={disabled}>
     {children}
-  </StyledButton>
+  </StyledNextButton>
 );
 
 export default NextButton;
