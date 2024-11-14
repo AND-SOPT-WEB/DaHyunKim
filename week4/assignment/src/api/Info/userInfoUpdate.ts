@@ -1,5 +1,5 @@
-import axios from 'axios';
-import BASE_URL from '../config';
+import { AxiosError } from 'axios';
+import api from '../config';
 
 interface UpdateInfoRequest {
   password?: string;
@@ -15,12 +15,17 @@ export const updateUserInfo = async (
   data: UpdateInfoRequest
 ): Promise<UpdateInfoResponse> => {
   try {
-    const response = await axios.put<UpdateInfoResponse>(`${BASE_URL}/user`, data, {
-      headers: { token },
+    const response = await api.put<UpdateInfoResponse>('/user', data, {
+      headers: {
+        'Content-Type': 'application/json',
+        'token': token,
+      },
     });
     return response.data;
   } catch (error) {
-    console.error("정보 수정 요청 실패:", error);
-    throw error;
+    if (error instanceof AxiosError) {
+      console.error("정보 수정 요청 실패:", error.response?.data);
+    }
+    throw error; 
   }
 };

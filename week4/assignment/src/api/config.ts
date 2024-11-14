@@ -1,3 +1,20 @@
-const BASE_URL = 'http://211.188.53.75:8080';
+import axios from 'axios';
 
-export default BASE_URL;
+const api = axios.create({
+  baseURL: 'http://211.188.53.75:8080', 
+});
+
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token'); 
+    if (token && config.headers) {
+      config.headers['token'] = token; 
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+export default api;

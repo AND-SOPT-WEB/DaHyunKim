@@ -1,5 +1,4 @@
-import axios from 'axios';
-import BASE_URL from '../config';
+import api from '../config';
 
 interface RegisterResponse {
   result?: {
@@ -16,7 +15,7 @@ interface RegisterData {
 
 export const registerUser = async (data: RegisterData): Promise<RegisterResponse> => {
   try {
-    const response = await axios.post<RegisterResponse>(`${BASE_URL}/user`, data);
+    const response = await api.post<RegisterResponse>('/user', data);
     return response.data;
   } catch (error) {
     console.error("회원가입 요청 실패:", error);

@@ -1,5 +1,5 @@
-import axios, { AxiosError } from 'axios';
-import BASE_URL from '../config';
+import { AxiosError } from 'axios';
+import api from '../config';
 
 interface LoginRequest {
   username: string;
@@ -13,15 +13,13 @@ interface LoginResponse {
 
 export const userLogin = async (data: LoginRequest): Promise<LoginResponse> => {
   try {
-    const response = await axios.post<LoginResponse>(`${BASE_URL}/login`, data);
+    const response = await api.post<LoginResponse>('/login', data);
     return response.data;
   } catch (error) {
-    console.error("로그인 요청 실패:", error);
-
-    if (error instanceof AxiosError && error.response && error.response.data) {
-      return error.response.data;
+    if (error instanceof AxiosError) {
+      console.error("로그인 요청 실패:", error.response?.data);
+      return error.response?.data || {};
     }
-    
     throw new Error("에러 발생");
   }
 };
